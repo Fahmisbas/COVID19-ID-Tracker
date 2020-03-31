@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Indonesia COVID19 Tracker</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="total_cases">Total Cases</string>
+    <string name="recovered">Recovered</string>
+    <string name="death">Deaths</string>
+    <string name="positive">Positive</string>
+    <string name="dummy_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="toolbar_title_mythbuster">Myth Buster</string>
+    <string name="toolbar_title_howmask">When and how to use masks</string>
+    <string name="toolbar_title_about">About</string>
+    <string name="toolbar_title_information">Information</string>
+    <string name="about_me">Fahmi Sulaiman Baswedan\n\nhttps://github.com/Fahmisbas\nhttps://medium.com/@fahmisulaimanbas\n\nInfo and About Section Inspired by Alfian Losari\n\n© 2020 Fahmi Sulaiman. All RIght Reserved</string>
+    <string name="about_covid_data_copyright">MIT License 2020, mathdroid.\n\nhttps://indonesia-covid-19.mathdro.id/api</string>
+    <string name="about_information_copyright">WHO(World Health Organization)\n\nhttps://www.who.int/emergencies/diseases/novel-coronavirus-2019</string>
+    <string name="toolbar_title_QA"><![CDATA[Q&A on coronaviruses]]></string>
+</resources>

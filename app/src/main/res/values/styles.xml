@@ -1,0 +1,35 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">@android:color/holo_red_dark</item>
+    </style>
+
+    <style name="CardViewDashBoardLeft" >
+        <item name="android:layout_width">@dimen/_115sdp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/_10sdp</item>
+        <item name="android:layout_marginBottom">@dimen/_10sdp</item>
+        <item name="android:layout_marginStart">@dimen/_10sdp</item>
+        <item name="android:layout_alignParentStart">true</item>
+    </style>
+
+    <style name="CardViewDashBoardRight" >
+        <item name="android:layout_width">@dimen/_115sdp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/_10sdp</item>
+        <item name="android:layout_marginBottom">@dimen/_10sdp</item>
+        <item name="android:layout_marginEnd">@dimen/_10sdp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
+
+    <style name="AppMargin">
+        <item name="android:layout_marginStart">@dimen/_25sdp</item>
+        <item name="android:layout_marginTop">@dimen/_15sdp</item>
+        <item name="android:layout_marginEnd">@dimen/_25sdp</item>
+    </style>
+
+</resources>
