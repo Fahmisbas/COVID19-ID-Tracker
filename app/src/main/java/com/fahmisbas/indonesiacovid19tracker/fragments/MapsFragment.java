@@ -88,7 +88,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
             for (int i = 0; i < provincesDataList.size(); i++) {
                 Province province = provincesDataList.get(i);
-                mMap.getUiSettings().setMapToolbarEnabled(false);
 
                 String provinceName = province.getProvinceName().toLowerCase();
                 String recovered = province.getRecovered();
@@ -218,10 +217,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void makeMarker(double latude, double longit, String orovinceName, String positive, String recovered, String meninggal) {
+    private void makeMarker(double latude, double longit, String provinceName, String positive, String recovered, String deaths) {
         LatLng location = new LatLng(latude, longit);
-        mMap.addMarker(new MarkerOptions().position(location).title("(" + orovinceName + ")" + " Positive : " + positive+","+
-                " Recovered : " + recovered+"," + " Deaths : " + meninggal+",").icon(bitmapDescriptorFromVector(getContext(),
+        mMap.addMarker(new MarkerOptions().position(location).title("(" + provinceName + ")" + " Positive : " + positive+","+
+                " Recovered : " + recovered+"," + " Deaths : " + deaths+",").icon(bitmapDescriptorFromVector(getContext(),
                 R.drawable.ic_circle_small)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
     }

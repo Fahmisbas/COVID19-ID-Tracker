@@ -36,6 +36,7 @@ public class InfoFragment extends Fragment {
     private TextView tvBasicProTitle, tvBasicProSub;
     private ProgressBar progressBar;
     private View view;
+    private CardView cardViewMeas;
 
     @Nullable
     @Override
@@ -68,6 +69,8 @@ public class InfoFragment extends Fragment {
         back.setVisibility(View.GONE);
         TextView toolbar_title = view.findViewById(R.id.toolbar_title);
         toolbar_title.setText(R.string.toolbar_title_information);
+        cardViewMeas = view.findViewById(R.id.cardview_basicmea);
+        cardViewMeas.setVisibility(View.GONE);
     }
 
     private void toWearMaskFragment(final Fragment fragment) {
@@ -147,6 +150,7 @@ public class InfoFragment extends Fragment {
         try {
             if (!json.isEmpty()) {
                 progressBar.setVisibility(View.GONE);
+                cardViewMeas.setVisibility(View.VISIBLE);
 
                 getMythBuster(json);
                 getWearMask(json);
@@ -178,6 +182,7 @@ public class InfoFragment extends Fragment {
                 initRecyclerview();
             } else {
                 progressBar.setVisibility(View.VISIBLE);
+                cardViewMeas.setVisibility(View.GONE);
             }
         } catch (JSONException e) {
             e.printStackTrace();

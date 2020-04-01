@@ -32,15 +32,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CasesFragment extends Fragment {
 
-    private TextView tvDeath, tvRecovered, tvPositive, tvTotalCases, viewAll;
+    private TextView tvDeath, tvRecovered, tvPositive, tvTotalCases, viewAll, tvTimestamp;
     private ProgressBar progressBar;
     private ArrayList<Province> provincesArrayList = new ArrayList<>();
     private ProvinceAdapter adapter;
     private View view;
+
 
     @Nullable
     @Override
@@ -55,10 +59,12 @@ public class CasesFragment extends Fragment {
         setToolbar();
 
         new IndonesiaJSONData("https://indonesia-covid-19.mathdro.id/api").start();
+
         return view;
     }
 
     private void initViews() {
+        tvTimestamp = view.findViewById(R.id.tv_timestamp);
         tvDeath = view.findViewById(R.id.tv_death);
         tvPositive = view.findViewById(R.id.tv_positive);
         tvRecovered = view.findViewById(R.id.tv_recovered);
@@ -69,6 +75,25 @@ public class CasesFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar_cases);
         progressBar.setVisibility(View.VISIBLE);
     }
+
+    private void setTextIndonesiaData() {
+        if (getActivity() != null) {
+            SharedPreferences indonesiaData = getActivity().getSharedPreferences("ID-Data", Context.MODE_PRIVATE);
+            String death = indonesiaData.getString("id-death", null);
+            tvDeath.setText(death);
+            String positive = indonesiaData.getString("id-positive", null);
+            tvPositive.setText(positive);
+            String recovered = indonesiaData.getString("id-recovered", null);
+            tvRecovered.setText(recovered);
+            String totalCases = indonesiaData.getString("id-total", null);
+            tvTotalCases.setText(totalCases);
+
+            SharedPreferences latestUpdate = getActivity().getSharedPreferences("timestamp", Context.MODE_PRIVATE);
+            String latestupdate = latestUpdate.getString("time", "Check your internet connection");
+            tvTimestamp.setText(latestupdate);
+        }
+    }
+
 
     private void toFragment(Fragment selectedFragment) {
         if (getActivity() != null) {
@@ -101,6 +126,7 @@ public class CasesFragment extends Fragment {
 
         String address;
         String result = "";
+        String jsonLatestTime = "";
 
         IndonesiaJSONData(String address) {
             this.address = address;
@@ -110,6 +136,33 @@ public class CasesFragment extends Fragment {
         public void run() {
             super.run();
             getJson();
+            getLatestUpdateTime("https://covid19.mathdro.id/api/countries/ID/");
+        }
+
+        private void getLatestUpdateTime(String s) {
+            try {
+                URL url = new URL(s);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                InputStream in = connection.getInputStream();
+                InputStreamReader reader = new InputStreamReader(in);
+                int reading = reader.read();
+
+                while (reading != -1) {
+                    char current = (char) reading;
+                    jsonLatestTime += current;
+                    reading = reader.read();
+                }
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            formatDate(getTimestamp(jsonLatestTime));
+                        }
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         private void getJson() {
@@ -143,6 +196,30 @@ public class CasesFragment extends Fragment {
         }
     }
 
+    private String getTimestamp(String result) {
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            return jsonObject.getString("lastUpdate");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "No Internet Connection";
+        }
+    }
+
+    private void formatDate(String dateStr) {
+        try {
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date date = fmt.parse(dateStr);
+            SimpleDateFormat fmtOut = new SimpleDateFormat("dd MMMM yyyy");
+            if (date != null && getActivity() != null) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("timestamp", Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString("time", "Last Update, " + fmtOut.format(date)).apply();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void processingIDJson(String json) {
         try {
             if (json != null) {
@@ -162,26 +239,12 @@ public class CasesFragment extends Fragment {
                     editor.putString("id-recovered", recovered).apply();
                     editor.putString("id-total", totalCases).apply();
                 }
-            }else {
+            } else {
                 progressBar.setVisibility(View.VISIBLE);
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void setTextIndonesiaData() {
-        if (getActivity() != null) {
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("ID-Data", Context.MODE_PRIVATE);
-            String death = sharedPreferences.getString("id-death", null);
-            tvDeath.setText(death);
-            String positive = sharedPreferences.getString("id-positive", null);
-            tvPositive.setText(positive);
-            String recovered = sharedPreferences.getString("id-recovered", null);
-            tvRecovered.setText(recovered);
-            String totalCases = sharedPreferences.getString("id-total", null);
-            tvTotalCases.setText(totalCases);
         }
     }
 

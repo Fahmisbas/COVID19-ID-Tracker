@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,18 +30,25 @@ public class ViewAllFragment extends Fragment {
     private ArrayList<Province> provincesArrayList = new ArrayList<>();
     private View view;
     private ProvinceAdapter adapter;
+    private TextView tvTimestamp;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_viewall,container,false);
-        Button back = view.findViewById(R.id.btn_back);
-        back.setVisibility(View.GONE);
 
+        initViews();
         getProvinceDataList();
         initRecyclerView();
 
         return view;
+    }
+
+    private void initViews() {
+        Button back = view.findViewById(R.id.btn_back);
+        Button refresh = view.findViewById(R.id.btn_refresh);
+        back.setVisibility(View.GONE);
+        refresh.setVisibility(View.GONE);
     }
 
     private void initRecyclerView() {
