@@ -51,7 +51,7 @@ public class InfoFragment extends Fragment {
 
         toQAFragment(new QandAFragment());
 
-        new InfoJsonData().start();
+        new GetInfoJson().start();
 
 
         return view;
@@ -110,19 +110,16 @@ public class InfoFragment extends Fragment {
     }
 
 
-    public class InfoJsonData extends Thread {
+    public class GetInfoJson extends Thread {
         String result = "";
-
-        InfoJsonData() {
-        }
 
         @Override
         public void run() {
             super.run();
-            getJson();
+            whoJson();
         }
 
-        private void getJson() {
+        private void whoJson() {
             InputStream in = getResources().openRawResource(R.raw.who_corona_advice);
             InputStreamReader reader = new InputStreamReader(in);
             try {
@@ -152,9 +149,9 @@ public class InfoFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 cardViewMeas.setVisibility(View.VISIBLE);
 
-                getMythBuster(json);
-                getWearMask(json);
-                getQA(json);
+                mythBuster(json);
+                wearMask(json);
+                QandA(json);
 
                 JSONObject jsonObject = new JSONObject(json);
 
@@ -190,7 +187,7 @@ public class InfoFragment extends Fragment {
 
     }
 
-    private void getQA(String json) {
+    private void QandA(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
             String topics = jsonObject.getString("topics");
@@ -208,7 +205,7 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    private void getWearMask(String json) {
+    private void wearMask(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
             String topics = jsonObject.getString("topics");
@@ -226,7 +223,7 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    private void getMythBuster(String json) {
+    private void mythBuster(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
             String topics = jsonObject.getString("topics");

@@ -39,12 +39,12 @@ public class MythBusterFragment extends Fragment {
 
         onBackPressed();
 
-        setToolbarTitle();
+        setToolbar();
 
         return view;
     }
 
-    private void setToolbarTitle() {
+    private void setToolbar() {
         TextView toolbar_title = view.findViewById(R.id.toolbar_title);
         toolbar_title.setText(R.string.toolbar_title_mythbuster);
 

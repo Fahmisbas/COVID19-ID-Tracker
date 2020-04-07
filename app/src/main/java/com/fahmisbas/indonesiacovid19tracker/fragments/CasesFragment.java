@@ -3,7 +3,6 @@ package com.fahmisbas.indonesiacovid19tracker.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fahmisbas.indonesiacovid19tracker.DownloadingTask;
 import com.fahmisbas.indonesiacovid19tracker.adapter.ProvinceAdapter;
 import com.fahmisbas.indonesiacovid19tracker.R;
 import com.fahmisbas.indonesiacovid19tracker.model.Province;
@@ -27,11 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,7 +34,7 @@ import java.util.Date;
 
 public class CasesFragment extends Fragment {
 
-    private TextView tvDeath, tvRecovered, tvPositive, tvTotalCases, viewAll, tvTimestamp;
+    private TextView tvDeath, tvRecovered, tvPositive, tvTotalCases, viewAll, tvLastUpdate;
     private ProgressBar progressBar;
     private ArrayList<Province> provincesArrayList = new ArrayList<>();
     private ProvinceAdapter adapter;
@@ -51,29 +46,27 @@ public class CasesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cases, container, false);
         initViews();
-
         setTextIndonesiaData();
-
         viewAllProvice();
-
         setToolbar();
 
-        new IndonesiaJSONData("https://indonesia-covid-19.mathdro.id/api").start();
+        DownloadIndonesiaJson();
+        DownloadLastUpdateTimeJson();
 
         return view;
     }
 
     private void initViews() {
-        tvTimestamp = view.findViewById(R.id.tv_timestamp);
+        tvLastUpdate = view.findViewById(R.id.tv_lastUpdate);
         tvDeath = view.findViewById(R.id.tv_death);
         tvPositive = view.findViewById(R.id.tv_positive);
         tvRecovered = view.findViewById(R.id.tv_recovered);
         tvTotalCases = view.findViewById(R.id.tv_totalCases);
         viewAll = view.findViewById(R.id.viewAll);
         Button back = view.findViewById(R.id.btn_back);
-        back.setVisibility(View.GONE);
         progressBar = view.findViewById(R.id.progressBar_cases);
         progressBar.setVisibility(View.VISIBLE);
+        back.setVisibility(View.GONE);
     }
 
     private void setTextIndonesiaData() {
@@ -90,15 +83,7 @@ public class CasesFragment extends Fragment {
 
             SharedPreferences latestUpdate = getActivity().getSharedPreferences("timestamp", Context.MODE_PRIVATE);
             String latestupdate = latestUpdate.getString("time", "Check your internet connection");
-            tvTimestamp.setText(latestupdate);
-        }
-    }
-
-
-    private void toFragment(Fragment selectedFragment) {
-        if (getActivity() != null) {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment)
-                    .commit();
+            tvLastUpdate.setText(latestupdate);
         }
     }
 
@@ -122,88 +107,29 @@ public class CasesFragment extends Fragment {
         });
     }
 
-    public class IndonesiaJSONData extends Thread {
-
-        String address;
-        String result = "";
-        String jsonLatestTime = "";
-
-        IndonesiaJSONData(String address) {
-            this.address = address;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            getJson();
-            getLatestUpdateTime("https://covid19.mathdro.id/api/countries/ID/");
-        }
-
-        private void getLatestUpdateTime(String s) {
-            try {
-                URL url = new URL(s);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                InputStream in = connection.getInputStream();
-                InputStreamReader reader = new InputStreamReader(in);
-                int reading = reader.read();
-
-                while (reading != -1) {
-                    char current = (char) reading;
-                    jsonLatestTime += current;
-                    reading = reader.read();
-                }
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            formatDate(getTimestamp(jsonLatestTime));
-                        }
-                    });
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void getJson() {
-            try {
-                URL url = new URL(address);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                InputStream in = connection.getInputStream();
-                InputStreamReader reader = new InputStreamReader(in);
-                int reading = reader.read();
-
-                while (reading != -1) {
-                    char current = (char) reading;
-                    result += current;
-                    reading = reader.read();
-                }
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!result.equals("")) {
-                                processingIDJson(result);
-                                getProvinceJSON(result);
-                            }
-                        }
-                    });
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+    private void toFragment(Fragment selectedFragment) {
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment)
+                    .commit();
         }
     }
 
-    private String getTimestamp(String result) {
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            return jsonObject.getString("lastUpdate");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "No Internet Connection";
-        }
+    private void DownloadLastUpdateTimeJson() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final DownloadingTask downloadingTask = new DownloadingTask("https://covid19.mathdro.id/api/countries/ID/");
+                downloadingTask.start();
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            formatDate(getLastUpdateTime(downloadingTask.getResult()));
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     private void formatDate(String dateStr) {
@@ -220,9 +146,38 @@ public class CasesFragment extends Fragment {
         }
     }
 
-    private void processingIDJson(String json) {
+    private String getLastUpdateTime(String json) {
         try {
-            if (json != null) {
+            JSONObject jsonObject = new JSONObject(json);
+            return jsonObject.getString("lastUpdate");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "No Internet Connection";
+        }
+    }
+
+    private void DownloadIndonesiaJson() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final DownloadingTask downloadingTask = new DownloadingTask("https://indonesia-covid-19.mathdro.id/api");
+                downloadingTask.start();
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            processingIndonesiaJson(downloadingTask.getResult());
+                            provinceJsonAddress(downloadingTask.getResult());
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    private void processingIndonesiaJson(String json) {
+        try {
+            if (!json.equals("")) {
                 progressBar.setVisibility(View.GONE);
 
                 JSONObject jsonObject = new JSONObject(json);
@@ -242,71 +197,44 @@ public class CasesFragment extends Fragment {
             } else {
                 progressBar.setVisibility(View.VISIBLE);
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void getProvinceJSON(String result) {
+    private void provinceJsonAddress(String json) {
         try {
-            JSONObject jsonObject = new JSONObject(result);
+            JSONObject jsonObject = new JSONObject(json);
             String perProvinsi = jsonObject.getString("perProvinsi");
             JSONObject objectProvince = new JSONObject(perProvinsi);
             String jsonAddress = objectProvince.getString("json");
 
-            new ProvinceJSONData(jsonAddress).start();
+            downloadingProvinceJson(jsonAddress);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private class ProvinceJSONData extends Thread {
-
-        String address;
-        String result = "";
-
-        public ProvinceJSONData(String address) {
-            this.address = address;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            getJson();
-        }
-
-        private void getJson() {
-            try {
-                URL url = new URL(address);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                InputStream in = connection.getInputStream();
-                InputStreamReader reader = new InputStreamReader(in);
-                int reading = reader.read();
-
-                while (reading != -1) {
-                    char current = (char) reading;
-
-                    result += current;
-
-                    reading = reader.read();
-                }
+    private void downloadingProvinceJson(final String address) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final DownloadingTask downloadingTask = new DownloadingTask(address);
+                downloadingTask.start();
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            processingProvinceJSON(result);
+                            processingProvinceJson(downloadingTask.getResult());
                         }
                     });
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
+        }).start();
     }
 
-    private void processingProvinceJSON(String json) {
+    private void processingProvinceJson(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
             String data = jsonObject.getString("data");
@@ -332,20 +260,25 @@ public class CasesFragment extends Fragment {
                 provincesArrayList.add(province);
             }
 
-            if (getActivity() != null) {
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Province-Data", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+            saveProvinceArrayList();
 
-                Gson gson = new Gson();
-                String gsonToJson = gson.toJson(provincesArrayList);
-                editor.putString("provinceList", gsonToJson).apply();
+            initRecyclerView();
 
-                initRecyclerView();
-            }
-        } catch (JSONException e) {
+        } catch (
+                JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    private void saveProvinceArrayList() {
+        if (getActivity() != null) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Province-Data", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            Gson gson = new Gson();
+            String gsonToJson = gson.toJson(provincesArrayList);
+            editor.putString("provinceList", gsonToJson).apply();
+        }
     }
 
     private void initRecyclerView() {
