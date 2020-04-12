@@ -45,182 +45,186 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="45dp" />
 
-        <LinearLayout
+        <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="@dimen/_25sdp"
             android:layout_marginTop="@dimen/_2sdp"
             android:layout_marginEnd="@dimen/_25sdp"
-            android:orientation="vertical">
+            android:layout_weight="4"
+            android:columnCount="2"
+            android:columnOrderPreserved="false"
+            android:rowCount="2">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:orientation="vertical"
+                card_view:cardBackgroundColor="@android:color/holo_orange_dark"
+                card_view:cardCornerRadius="10dp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardview_total"
-                    style="@style/CardViewDashBoardLeft"
-                    android:orientation="vertical"
-                    card_view:cardBackgroundColor="@android:color/holo_orange_dark"
-                    card_view:cardCornerRadius="10dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_10sdp">
+                    <TextView
+                        android:id="@+id/title_totalcases"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/total_cases"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_16sdp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/title_totalcases"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/total_cases"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_16sdp"
-                            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tv_totalCases"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title_totalcases"
+                        android:layout_centerHorizontal="true"
+                        android:text="0"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_20sdp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_totalCases"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/title_totalcases"
-                            android:layout_centerHorizontal="true"
-                            android:text="0"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_20sdp"
-                            android:textStyle="bold" />
+                </RelativeLayout>
 
-                    </RelativeLayout>
-
-                </androidx.cardview.widget.CardView>
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardview_recovered"
-                    style="@style/CardViewDashBoardLeft"
-                    android:layout_below="@id/cardview_total"
-                    android:orientation="vertical"
-                    card_view:cardBackgroundColor="@android:color/holo_green_dark"
-                    card_view:cardCornerRadius="10dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_10sdp">
-
-                        <TextView
-                            android:id="@+id/title_recovered"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/recovered"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_15sdp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_recovered"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/title_recovered"
-                            android:layout_centerHorizontal="true"
-                            android:text="0"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_20sdp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
 
-                </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_recovered"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                card_view:cardBackgroundColor="@android:color/holo_green_dark"
+                card_view:cardCornerRadius="10dp">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardview_death"
-                    style="@style/CardViewDashBoardRight"
-                    android:layout_below="@id/cardview_positive"
-                    card_view:cardBackgroundColor="#6A0DAD"
-                    card_view:cardCornerRadius="10dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_10sdp">
+                    <TextView
+                        android:id="@+id/title_recovered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/recovered"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/title_death"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/death"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_15sdp"
-                            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tv_recovered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title_recovered"
+                        android:layout_centerHorizontal="true"
+                        android:text="0"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_20sdp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_death"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/title_death"
-                            android:layout_centerHorizontal="true"
-                            android:text="0"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_20sdp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
+                </RelativeLayout>
 
 
-                </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardview_positive"
-                    style="@style/CardViewDashBoardRight"
-                    android:orientation="vertical"
-                    card_view:cardBackgroundColor="@android:color/holo_red_dark"
-                    card_view:cardCornerRadius="10dp">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_death"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"
+                card_view:cardBackgroundColor="#6A0DAD"
+                card_view:cardCornerRadius="10dp">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_10sdp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10sdp">
 
-                        <TextView
-                            android:id="@+id/title_positive"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:text="@string/positive"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_15sdp"
-                            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/title_death"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/death"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_positive"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/title_positive"
-                            android:layout_centerHorizontal="true"
-                            android:text="0"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/_20sdp"
-                            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tv_death"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:layout_below="@id/title_death"
+                        android:layout_centerHorizontal="true"
+                        android:text="0"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_20sdp"
+                        android:textStyle="bold" />
 
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
-            </RelativeLayout>
-        </LinearLayout>
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_positive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                card_view:cardBackgroundColor="@android:color/holo_red_dark"
+                card_view:cardCornerRadius="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10sdp"
+                    >
+
+                    <TextView
+                        android:id="@+id/title_positive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="@string/positive"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_positive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title_positive"
+                        android:layout_centerHorizontal="true"
+                        android:text="0"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_20sdp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -286,7 +290,7 @@
                     android:id="@+id/progressBar_cases"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true" />
 
             </RelativeLayout>
         </FrameLayout>
