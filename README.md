@@ -9,3 +9,5 @@
 - Advice from WHO to prevent corona virus, myth busters and Q&A.
 
 
+Developed without using third party library for parsing json
+
